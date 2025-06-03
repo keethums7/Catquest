@@ -78,31 +78,19 @@ module.exports = {
             inject: "body",
             filename: "index.html",
         }),
-        // new htmlWebpackPlugin({
-        //     template: path.resolve(__dirname, "./src/about.html"),
-        //     chunks: ["about"],
-        //     inject: "body",
-        //     filename: "about.html",
-        // }),
-        // new htmlWebpackPlugin({
-        //     template: path.resolve(__dirname, "./src/status.html"),
-        //     chunks: ["status"],
-        //     inject: "body",
-        //     filename: "status.html",
-        // }),
-        // new copyPlugin({
-        //     patterns: [
-        //         {
-        //             from: path.resolve(__dirname, "src/assets/images"),
-        //             to: path.resolve(__dirname, "dist/assets/images"),
-        //         },
-        //     ],
-        // }),
+        new copyPlugin({
+            patterns: [
+                {
+                    from: path.resolve(__dirname, "src/assets/images"),
+                    to: path.resolve(__dirname, "dist/assets/images"),
+                },
+            ],
+        }),
         /* app uses global SERVER_URL rather than process.env.SERVER_URL */
         new webpack.DefinePlugin({
             NODE_ENV: JSON.stringify(process.env.NODE_ENV),
             SERVER_URL: JSON.stringify(process.env.SERVER_URL),
-            GMAP_KEY: JSON.stringify(process.env.GMAP_KEY),
+            CAT_API_KEY: JSON.stringify(process.env.CAT_API_KEY),
         }),
     ],
     /* separates js (and css) that is shared between bundles - allows browser to cache */
@@ -122,5 +110,5 @@ if(isProduction) {
             filename: fileNamePrefix + "[name].css",
         })
     );
-};
-  
+}
+
