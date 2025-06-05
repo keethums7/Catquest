@@ -20,8 +20,6 @@ export class Cat {
         }
     }
 
-
-
 }
 
 function getRandomInteger(min, max) {
