@@ -34,13 +34,15 @@ export class Cat {
     }
 
     checkFaint(enemy){
+        console.log('start checkFaint():\n-this cat:', this, '\n-enemy cat:', enemy);
         this.stats.fainted = (this.stats.currHP <= 0);
-        this.doSwap = this.stats.fainted;
+        this.doSwap = !this.doSwap ? this.stats.fainted: this.doSwap;
         this.stats.currHP =  this.stats.currHP < 0 ? 0 : this.stats.currHP;
 
         enemy.stats.fainted = (enemy.stats.currHP <= 0);
-        enemy.doSwap =  enemy.stats.fainted;
+        enemy.doSwap =  !enemy.doSwap ? enemy.stats.fainted : enemy.doSwap;
         enemy.stats.currHP =  enemy.stats.currHP < 0 ? 0 : enemy.stats.currHP;
+        console.log('end checkFaint():\n-this cat:', this, '\n-enemy cat:', enemy);
     }
     passTurn(enemy) {
         // 2/3 chance for enemy to attack,

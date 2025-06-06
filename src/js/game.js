@@ -28,18 +28,21 @@ export class Game {
     }
 
     checkSwaps() {
+        console.log('start of checkSwaps:\n-player team:', this.team, '\n- enemy team:', this.enemies);
         if (this.team[0].doSwap) {
             this.team[0].doSwap = false;
             // hotswap the active and a benched cat from player team
             if (!(this.team[1].stats.fainted)) {
-                console.log('swapping active cat with bench cat 1:', this.team[1]);
+                console.log(`swapping active cat - ${this.team[0].name} - with bench cat 1: ${this.team[1].name}`);
                 [this.team[0], this.team[1]] = [this.team[1], this.team[0]];
+                console.log(`after swap: active cat - ${this.team[0].name} - bench cat 1: ${this.team[1].name}`);
             // if the first bench slot was fainted, try the next
             } else if (!(this.team[2].stats.fainted)) {
-                console.log('swapping active cat with bench cat 2:', this.team[2]);
+                console.log(`swapping active cat - ${this.team[0].name} - with bench cat 2: ${this.team[2].name}`);
                 [this.team[0], this.team[2]] = [this.team[2], this.team[0]];
+                console.log(`after swap: active cat - ${this.team[0].name} - bench cat 2: ${this.team[2].name}`);
             } else {
-                console.log("couldn't swap active cat with bench cat 2:", this.team[2]);
+                console.log("couldn't swap active cat with either bench cat, checking game end...");
                 this.checkGameEnd()
             }
         }
@@ -48,17 +51,20 @@ export class Game {
             // hotswap the enemy cat with a benched enemy cat
             // if the bench cat 1 isn't fainted, swap with it
             if (!(this.enemies[1].stats.fainted)) {
-                console.log('swapping enemy with bench cat 1:', this.enemies[1]);
+                console.log(`swapping enemy cat - ${this.enemies[0].name} - with bench cat 1: ${this.enemies[1].name}`);
                 [this.enemies[0], this.enemies[1]] = [this.enemies[1], this.enemies[0]];
+                console.log(`after swap: enemy cat - ${this.enemies[0].name} - bench cat 1: ${this.enemies[1].name}`);
                 // if the first bench slot was fainted, try the next
-            } else if (!(this.enemies[2].stats.fainted)) {
-                console.log('swapping enemy with bench cat 2:', this.enemies[2]);
+            } else if (!(this.team[2].stats.fainted)) {
+                console.log(`swapping enemy cat - ${this.enemies[0].name} - with bench cat 2: ${this.enemies[2].name}`);
                 [this.enemies[0], this.enemies[2]] = [this.enemies[2], this.enemies[0]];
+                console.log(`after swap: enemy cat - ${this.team[0].name} - bench cat 2: ${this.enemies[2].name}`);
             } else {
-                console.log("couldn't swap enemy with any other cat");
+                console.log("couldn't swap enemy cat with either bench cat, checking game end...");
                 this.checkGameEnd();
             }
         }
+        console.log('end of checkSwaps:\n-player team:', this.team, '\n- enemy team:', this.enemies);
     }
 
     checkGameEnd () {
@@ -94,6 +100,7 @@ export class Game {
         // quickly check if the cats need swapped
 
         this.checkSwaps();
+        console.log('after checkSwaps() in updateBoard():\n- player team:', this.team, '\n- enemy team:', this.enemies);
 
         this.$gameArea.innerHTML = `
         <!-- active cat placeholder -->
@@ -183,7 +190,7 @@ export class Game {
                             <p class="card-text" id="enemyAtk">ATK:${this.team[2].stats.atk}</p>
                             <p class="card-text" >HP:${this.team[2].stats.currHP}/${this.team[2].stats.maxHP}</p>
                             <div class="progress">
-                                <div class="progress-bar progress-bar-striped" role="progressbar" style="width: ${Math.floor(100* (this.enemies[2].stats.currHP / this.enemies[2].stats.maxHP))}%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="progress-bar progress-bar-striped" role="progressbar" style="width: ${Math.floor(100* (this.team[2].stats.currHP / this.team[2].stats.maxHP))}%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                         </div>
                     </div>
