@@ -34,7 +34,6 @@ export class Cat {
     }
 
     checkFaint(enemy){
-        console.log('in checkFaint()...')
         this.stats.fainted = (this.stats.currHP <= 0);
         this.doSwap = this.stats.fainted;
         this.stats.currHP =  this.stats.currHP < 0 ? 0 : this.stats.currHP;
@@ -42,16 +41,11 @@ export class Cat {
         enemy.stats.fainted = (enemy.stats.currHP <= 0);
         enemy.doSwap =  enemy.stats.fainted;
         enemy.stats.currHP =  enemy.stats.currHP < 0 ? 0 : enemy.stats.currHP;
-
-        console.log('this.name:', this.name, 'this.stats.:', this.stats);
-        console.log('enemy:', enemy.name, 'enemy.stats.:', enemy.stats);
     }
     passTurn(enemy) {
-        console.log('in passTurn()...');
         // 2/3 chance for enemy to attack,
         // 1/3 to heal
         const d3 = this.rng(0, 2);
-        console.log('d3:', d3);
         if ([0, 1].includes(d3)) {
             // don't want to heal from a negative value here, just block the full atk
             this.stats.currHP -= Math.max(0, (enemy.stats.atk - this.block));
@@ -63,14 +57,9 @@ export class Cat {
             }
         }
 
-        console.log('resetting recoil and block')
         this.recoil = 0;
         this.block = 0;
-
         this.checkFaint(enemy);
-        console.log('after checkFaint()...')
-        console.log('this.name:', this.name, 'this.stats.:', this.stats);
-        console.log('enemy:', enemy.name, 'enemy.stats.:', enemy.stats);
     }
 
     // deal damage to the opposing cat
@@ -89,20 +78,22 @@ export class Cat {
         this.passTurn(enemy);
     }
 
+    // heal a random value between 1 and the active cat's missing HP
     heal(enemy) {
-        // random number between 1 and your current missing HP
         const healAmt = this.rng(1, (this.stats.maxHP - this.stats.currHP));
         console.log('currHP:', this.stats.currHP, 'healAmt:', healAmt);
         this.stats.currHP += healAmt;
         this.passTurn(enemy)
     }
 
+    // flag the active cat for swapping
     swap(enemy) {
         this.doSwap = true;
         console.log('swapping...');
         this.passTurn(enemy);
     }
 
+    // helper function
     rng(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }

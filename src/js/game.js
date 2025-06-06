@@ -22,19 +22,14 @@ export class Game {
         this.checkSwaps = this.checkSwaps.bind(this);
         this.checkGameEnd = this.checkGameEnd.bind(this);
         this.updateBoard = this.updateBoard.bind(this);
-        this.endGame = this.endGame.bind(this);
 
         // kick things off by updating the board
         this.updateBoard()
     }
 
     checkSwaps() {
-        console.log('in checkSwaps()...');
-        console.log('active cat:', this.team[0]);
-        console.log('enemy cat:', this.enemies[0]);
         if (this.team[0].doSwap) {
             this.team[0].doSwap = false;
-            console.log('active swapping!...');
             // hotswap the active and a benched cat from player team
             if (!(this.team[1].stats.fainted)) {
                 console.log('swapping active cat with bench cat 1:', this.team[1]);
@@ -50,7 +45,6 @@ export class Game {
         }
         if (this.enemies[0].doSwap) {
             this.enemies[0].doSwap = false;
-            console.log('enemy swapping!...');
             // hotswap the enemy cat with a benched enemy cat
             // if the bench cat 1 isn't fainted, swap with it
             if (!(this.enemies[1].stats.fainted)) {
@@ -75,7 +69,6 @@ export class Game {
                 enemyKO++;
             }
         })
-        console.log('enemyKO:', enemyKO, '\nenemies:',this.enemies.length);
         this.team.forEach((t) => {
             if (t.stats.fainted) {
                 teamKO++;
@@ -87,26 +80,20 @@ export class Game {
         if (teamKO >= this.team.length) {
             // check for a tie
             if (enemyKO >= this.enemies.length) {
-                this.endGame("tie");
+                alert("You tied...");
             } else {
-                this.endGame("loss");
+                alert("You lose...");
             }
         // otherwise check for a win
         } else if (enemyKO >= this.enemies.length) {
-            this.endGame("win");
+            alert("You win!");
         }
-    }
-
-    endGame(result) {
-        alert(`Game over! result: ${result}`);
     }
 
     updateBoard(){
         // quickly check if the cats need swapped
 
-        console.log('in updateBoard(), enemies:', this.enemies, '\nplayer team:', this.team);
         this.checkSwaps();
-        console.log('after checkSwaps(), enemies:', this.enemies, '\nplayer team:', this.team);
 
         this.$gameArea.innerHTML = `
         <!-- active cat placeholder -->
