@@ -30,6 +30,8 @@ export class Game {
 
     checkSwaps() {
         console.log('in checkSwaps()...');
+        console.log('active cat:', this.team[0]);
+        console.log('enemy cat:', this.enemies[0]);
         if (this.team[0].doSwap) {
             this.team[0].doSwap = false;
             console.log('active swapping!...');
@@ -50,13 +52,14 @@ export class Game {
             this.enemies[0].doSwap = false;
             console.log('enemy swapping!...');
             // hotswap the enemy cat with a benched enemy cat
+            // if the bench cat 1 isn't fainted, swap with it
             if (!(this.enemies[1].stats.fainted)) {
                 console.log('swapping enemy with bench cat 1:', this.enemies[1]);
                 [this.enemies[0], this.enemies[1]] = [this.enemies[1], this.enemies[0]];
                 // if the first bench slot was fainted, try the next
-            } else if (!(this.team[2].stats.fainted)) {
+            } else if (!(this.enemies[2].stats.fainted)) {
                 console.log('swapping enemy with bench cat 2:', this.enemies[2]);
-                [this.team[0], this.enemies[2]] = [this.enemies[2], this.enemies[0]];
+                [this.enemies[0], this.enemies[2]] = [this.enemies[2], this.enemies[0]];
             } else {
                 console.log("couldn't swap enemy with any other cat");
                 this.checkGameEnd();
@@ -100,10 +103,11 @@ export class Game {
 
     updateBoard(){
         // quickly check if the cats need swapped
-        this.checkSwaps();
-        this.checkGameEnd();
 
         console.log('in updateBoard(), enemies:', this.enemies, '\nplayer team:', this.team);
+        this.checkSwaps();
+        console.log('after checkSwaps(), enemies:', this.enemies, '\nplayer team:', this.team);
+
         this.$gameArea.innerHTML = `
         <!-- active cat placeholder -->
         <div class="row pt-3">
@@ -201,10 +205,8 @@ export class Game {
             </div>
         </div>
         `;
-        this.$attack = document.querySelector("#attack");
-        this.$defend = document.querySelector("#defend");
-        this.$heal = document.querySelector("#heal");
-        this.$swap = document.querySelector("#swap");
+
+        // finish the loop!
         this.addEventListeners();
     }
 
@@ -217,26 +219,22 @@ export class Game {
         const $heal = document.querySelector("#heal");
         const $swap = document.querySelector("#swap");
 
-        $attack.addEventListener('click', (event) => {
-            event.preventDefault();
+        $attack.addEventListener('click', () => {
             console.log('attack');
             this.team[0].attack(this.enemies[0]);
             this.updateBoard();
         });
-        $defend.addEventListener('click', (event) => {
-            event.preventDefault();
+        $defend.addEventListener('click', () => {
             console.log('defend');
             this.team[0].defend(this.enemies[0]);
             this.updateBoard();
         });
-        $heal.addEventListener('click', (event) => {
-            event.preventDefault();
+        $heal.addEventListener('click', () => {
             console.log('heal');
             this.team[0].heal(this.enemies[0]);
             this.updateBoard();
         });
-        $swap.addEventListener('click', (event) => {
-            event.preventDefault();
+        $swap.addEventListener('click', () => {
             console.log('swap');
             if (this.team.length > 1) {
                 this.team[0].swap(this.enemies[0]);
