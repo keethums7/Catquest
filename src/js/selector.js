@@ -1,3 +1,5 @@
+// Keith Wangler - CS233JS - Lane Community College - 06/05/2025
+
 import { Cat } from "./cat"
 import { Game } from  "./game";
 
@@ -60,9 +62,9 @@ export class Selector {
         const $stats = $body.children.item(2) // card stat elem
 
         $img.src = cat.imgUrl;
-        $name.innerHTML = cat.name;
-        $breed.innerHTML = cat.breedStr;
-        $stats.innerHTML = `HP: ${cat.stats.currHP}/${cat.stats.maxHP} - ATK: ${cat.stats.atk}`;
+        $name.innerHTML = `Name: ${cat.name}`;
+        $breed.innerHTML = `Breed: ${cat.breedStr}`;
+        $stats.innerHTML = `ATK: ${cat.stats.atk}</br>HP: ${cat.stats.currHP}/${cat.stats.maxHP}`;
 
         // add event handling for the card container and its child elements
         this.addEventListeners($card, i);
